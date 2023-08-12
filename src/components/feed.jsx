@@ -66,6 +66,7 @@ const Feed = () => {
               key={tweet._id}
               id={tweet._id}
               name={tweet.creator.username}
+              accId={tweet.creator._id}
               image={tweet.creator.image}
               tweet={tweet.tweet}
               tag={tweet.tag}

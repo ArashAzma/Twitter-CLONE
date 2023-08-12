@@ -15,6 +15,7 @@ const Card = ({
   name,
   image,
   tweet,
+  accId,
   tag,
   id,
   type,
@@ -146,13 +147,15 @@ const Card = ({
       console.log(error);
     }
   }
-
+  const handleUsername = async(e) => {
+    router.push(`/profile/${accId}`);
+  }
   return (
     <div
       className="flex flex-col bg-[#1b2730] w-[400px] 
     md:w-[500px] rounded-[12px] p-6 gap-y-4 relative"
     >
-      {type == "tweets" && (
+      {(type == "tweets" && session.data?.user.id==accId) && (
         <div className="relative">
           <div
             onClick={() => setDropOpen(!dropOpen)}
@@ -191,7 +194,7 @@ const Card = ({
           alt="User"
           className="rounded-[12px]"
         />
-        <div className="opacity-70">@{name}</div>
+        <div onClick={handleUsername} className="opacity-70 cursor-pointer">@{name}</div>
       </div>
       <div className="flex flex-col justify-between ">
         <div className="">{tweet}</div>
