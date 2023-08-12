@@ -17,8 +17,8 @@ export const GET = async(req, {params}) => {
             populate: {
               path: "creator",
             },
-          });;
-        return new Response(JSON.stringify({tweets, likedTweets:user.likedTweets}), {status:200})    
+          });
+        return new Response(JSON.stringify({tweets, likedTweets:user.likedTweets, bookedTweets:user.bookedTweets}), {status:200})    
     } catch (error) {
         console.log(error)
         return new Response(JSON.stringify(error), {status:500})    

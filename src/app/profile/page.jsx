@@ -11,6 +11,7 @@ const Profile = () => {
   const [likedTweets, setLikedTweets] = useState([]);
   const [bookedTweets, setBookedTweets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
   const router = useRouter();
   
   if(status==="unauthenticated"){
@@ -23,13 +24,25 @@ const Profile = () => {
         const body = await res.json();
         setTweets(body.tweets);
         setLikedTweets(body.likedTweets);
+        setBookedTweets(body.bookedTweets);
         setLoading(false); 
       } catch (error) {
         console.error(error);
         setLoading(false);
       }
     };
-    if (data?.user.id){ fetchData();}
+    const fetchUser = async() => {
+      try {
+        const res = await fetch(`api/users/${data.user.id}`);
+        if(res.ok){
+          const user = await res.json(); 
+          setUser(user);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (data?.user.id){ fetchData(); fetchUser();} 
   }, [data?.user.id]);
   return (
     <div>
@@ -41,7 +54,7 @@ const Profile = () => {
         width={50}
     /></div>
       ) : (
-        <ProfilePage tweets={tweets} likedTweets={likedTweets} bookedTweets={bookedTweets}/>
+        <ProfilePage user={user} tweets={tweets} likedTweets={likedTweets} bookedTweets={bookedTweets}/>
       )}
     </div>
   );

@@ -7,6 +7,7 @@ import {
   RiHeartFill,
   RiHeartLine,
   RiBookmarkLine,
+  RiBookmarkFill,
   RiMoreLine,
 } from "react-icons/ri";
 
@@ -20,17 +21,22 @@ const Card = ({
   tagClick,
   like: likeCount,
   likedBy,
+  bookedBy,
 }) => {
   const session = useSession();
   const router = useRouter();
   const [dropOpen, setDropOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [isBooked, setIsBooked] = useState(false);
   const [likes, setLikes] = useState(likeCount);
   useEffect(() => {
     if (session && likedBy.includes(session.data?.user.id)) {
       setIsLiked(true);
     }
-  }, [session, likedBy]);
+    if (session && bookedBy.includes(session.data?.user.id)) {
+      setIsBooked(true);
+    }
+  }, [session, likedBy, bookedBy]);
 
   const handleDelete = async () => {
     console.log(id);
@@ -95,13 +101,58 @@ const Card = ({
       setLikes(likeCount);
     }
   };
+  const handleBookmark = async(e) => {
+    e.preventDefault();
+    try {
+      if(!isBooked){
+        setIsBooked(true)
+        const res = await fetch(`api/tweet/${id}`,{
+          method:"PATCH",
+          body:JSON.stringify({
+            action: "addBookmark",
+            tweet: "",
+            tag: "",
+            userId: session.data?.user.id,
+          })
+        })
+        if(res.ok){
+          console.log("BOOKED");
+        }else{
+          console.log(res);
+          setIsBooked(false);
+        }
+      }else{
+        setIsBooked(false);
+        const res = await fetch(`api/tweet/${id}`,{
+          method:"PATCH",
+          body:JSON.stringify({
+            action: "removeBookmark",
+            tweet: "",
+            tag: "",
+            userId: session.data?.user.id,
+          })
+        })
+        if(res.ok){
+          console.log("REMOVED BOOKED");
+        }else{
+          console.log(res);
+          setIsBooked(true);
+        }
+
+      }
+
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div
       className="flex flex-col bg-[#1b2730] w-[400px] 
     md:w-[500px] rounded-[12px] p-6 gap-y-4 relative"
     >
-      {type == "profile" && (
+      {type == "tweets" && (
         <div className="relative">
           <div
             onClick={() => setDropOpen(!dropOpen)}
@@ -150,11 +201,13 @@ const Card = ({
               {isLiked ? (
                 <RiHeartFill className="text-red-600 cursor-pointer" />
               ) : (
-                <RiHeartLine className="cursor-pointer" />
+                <RiHeartLine className="cursor-pointer hover:text-red-600 duration-200 "/>
               )}
             </div>
             {likes > 0 && <p className="text-sm">{likes}</p>}
-            <RiBookmarkLine />
+            <div onClick={handleBookmark} className="cursor-pointer">
+              {isBooked? <RiBookmarkFill /> : <RiBookmarkLine />}
+            </div>
           </div>
           <div
             className=" text-sm text-[#1da1f2] cursor-pointer"

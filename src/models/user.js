@@ -14,6 +14,10 @@ const UserSchema = new Schema({
     image: {
       type: String,
     },
+    bio: {
+      type: String,
+      maxlength: 64,
+    },
     likedTweets:[{
       type:Schema.Types.ObjectId,
       ref:'Tweet'
@@ -21,6 +25,14 @@ const UserSchema = new Schema({
     bookedTweets:[{
       type:Schema.Types.ObjectId,
       ref:'Tweet'
+    }],
+    following:[{
+      type:Schema.Types.ObjectId,
+      ref:'User'
+    }],
+    followers:[{
+      type:Schema.Types.ObjectId,
+      ref:'User'
     }],
   });
 

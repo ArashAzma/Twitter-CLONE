@@ -12,7 +12,7 @@ export const GET =async(req, {params}) => {
         }
         return new NextResponse(JSON.stringify(res), {status:200})
     } catch (error) {
-        return new NextResponse(JSON.stringify(error), {status:200})
+        return new NextResponse(JSON.stringify(error), {status:500})
     }
 }
 export const PATCH = async(req, {params}) => {
@@ -47,7 +47,41 @@ export const PATCH = async(req, {params}) => {
             await tw.save();
             us.likedTweets.pull(params.id)
             await us.save();
-            return new NextResponse("Added", {status:200});
+            return new NextResponse("REMOVED", {status:200});
+        }catch(err){
+            return new NextResponse(JSON.stringify(err), {status:200});
+        }
+    }else if (action==="addBookmark"){
+        try{
+            await connectToDB();
+            const tw = await Tweet.findById(params.id);
+            const us = await User.findById(userId);
+            if(!tw || !us){
+                return NextResponse("Tweet or User not found", {status:404})
+            }
+            tw.bookedBy.push(userId);
+            console.log(tw)
+            await tw.save();
+            us.bookedTweets.push(params.id);
+            console.log(us)
+            await us.save();
+            return new NextResponse(json.stringify("Added"), {status:200});
+        }catch(err){
+            return new NextResponse(JSON.stringify(err), {status:200});
+        }
+    }else if (action==="removeBookmark"){
+        try{
+            await connectToDB();
+            const tw = await Tweet.findById(params.id);
+            const us = await User.findById(userId);
+            if(!tw || !us){
+                return NextResponse("Tweet or User not found", {status:404})
+            }
+            tw.bookedBy.pull(userId);
+            await tw.save();
+            us.bookedTweets.pull(params.id);
+            await us.save();
+            return new NextResponse(json.stringify("Added"), {status:200});
         }catch(err){
             return new NextResponse(JSON.stringify(err), {status:200});
         }

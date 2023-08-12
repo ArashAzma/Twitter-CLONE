@@ -21,7 +21,11 @@ const TweetSchema = new Schema({
     likedBy: [{
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }]
+    }],
+    bookedBy: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     },{timestamps:true}
 )
 const Tweet = models.Tweet || model("Tweet", TweetSchema);

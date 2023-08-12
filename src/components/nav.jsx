@@ -27,7 +27,7 @@ const Nav = () => {
           <div className="relative inline-block text-left">
             <button
               type="button"
-              className="flex items-center px-4 py-1 rounded-full w-[100px]  focus:outline-none focus:text-[#1da1f2] duration-300"
+              className="flex items-center px-4 py-1 rounded-full w-[100px]  focus:outline-none focus:text-[#1da1f2] duration-300 "
               onClick={toggleDropdown}
             >
               Profile 
@@ -42,7 +42,7 @@ const Nav = () => {
           </div>
           <button
             type="button"
-            className="bg-[#1da1f2] px-4 py-1 rounded-full w-[100px]"
+            className="bg-[#1da1f2] px-4 py-1 rounded-full w-[100px] hover:bg-blue-600 duration-200"
             onClick={signOut}
           >
             logout
@@ -51,7 +51,7 @@ const Nav = () => {
       ) : (
         <button
           type="button"
-          className="bg-[#1da1f2] px-4 py-1 rounded-full w-[100px]"
+          className="bg-[#1da1f2] px-4 py-1 rounded-full w-[100px] hover:bg-blue-600 duration-200"
           onClick={() => signIn()}
         >
           login

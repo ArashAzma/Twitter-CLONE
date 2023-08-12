@@ -71,6 +71,7 @@ const Feed = () => {
               tag={tweet.tag}
               like={tweet.like}
               likedBy={tweet.likedBy}
+              bookedBy={tweet.bookedBy}
               tagClick={handleTagClick}
             />
           ))
