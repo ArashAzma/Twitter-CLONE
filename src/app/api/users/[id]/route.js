@@ -6,7 +6,7 @@ export const GET = async (res, {params}) => {
     try{
         await connectToDB();
         console.log(params.id)
-        const user= await User.findById(params.id);
+        const user= await User.findById(params.id).populate('following').populate('followers');
         console.log(user)
         if(!user){
             return new NextResponse("user doesnt Exist", {status:404});

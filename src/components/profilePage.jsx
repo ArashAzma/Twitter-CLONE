@@ -5,20 +5,45 @@ import { RiBallPenFill, RiCloseFill } from "react-icons/ri";
 import Card from "@/components/card";
 import Link from "next/link";
 import Image from "next/image";
+import AccountCard from "@/components/accountCard";
 
 const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
   const [data, setData] = useState(tweets);
   const [dataType, setDataType] = useState("tweets");
   const [bioOpen, setBioOpen] = useState(false);
+  const [followingOpen, setFollowingOpen] = useState(false);
+  const [followersOpen, setFollowersOpen] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [bio, setBio] = useState("");
   const {data:session} = useSession(); 
 
-  const handleClose = (reason) => {
+  useEffect(() => {
+    const isFollowed = async() => {
+      const followed = user.followers.some(follower => follower._id === session.user.id);
+      if(followed){
+        setIsFollowed(true);
+      }
+    };
+
+    if(session?.user) isFollowed();
+  },[session?.user && user])
+  const handleBioClose = (reason) => {
     if (reason === 'clickaway') {
       return;
     }
     setBioOpen(!bioOpen)
+  };
+  const handleFollowingClose = (reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setFollowingOpen(!followingOpen)
+  };
+  const handleFollowersClose = (reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setFollowersOpen(!followersOpen)
   };
   const handleBio = async(e)=>{
     e.preventDefault();
@@ -36,6 +61,48 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
     }catch(err){
       console.log(err);
     }
+  }
+  const handleFollow = async() => {
+      setIsFollowed(true)
+      const USER= session?.user.id;
+      const acc = user._id;
+      console.log(USER);
+      console.log(acc);
+      try {
+        const res = await fetch(`/api/users/${USER}/follow`,{
+          method:"PATCH",
+          body:JSON.stringify({
+            acc,
+            action:"follow"
+          })
+        })
+        if(res.ok){
+          console.log(res);
+        }
+      } catch (error) {
+        console.log(error);
+        setIsFollowed(false)
+      }
+  }
+  const handleUnfollow = async() => {
+      setIsFollowed(false)
+      const USER= session?.user.id;
+      const acc = user._id;
+      try {
+        const res = await fetch(`/api/users/${USER}/follow`,{
+          method:"PATCH",
+          body:JSON.stringify({
+            acc,
+            action:"unfollow"
+          })
+        })
+        if(res.ok){
+          console.log(res);
+        }
+      } catch (error) {
+        console.log(error);
+        setIsFollowed(true)
+      }
   }
   return (
     <div className="flex flex-col lg:flex-row-reverse  lg:items-start px-[75px] items-center justify-end gap-y-8 relative">
@@ -98,24 +165,24 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
                       ?<div className="opacity-70 text-xs font-medium">{user.bio}</div>
                       :<div className="opacity-70 font-light text-xs flex items-center gap-x-3">Bio is Empty !</div>
                     }
-                    {user._id == session.user.id && <RiBallPenFill onClick={handleClose} className="text-[17px] text-[#1da1f2] hover:text-sky-600 cursor-pointer "/>}
+                    {user._id == session?.user.id && <RiBallPenFill onClick={handleBioClose} className="text-[17px] text-[#1da1f2] hover:text-sky-600 cursor-pointer "/>}
                   </div>
                 </div>
                 <div className="grid grid-cols-2 divide-x divide-gray-400  gap-x-2 mb-3 justify-between items-center">
-                  <div className="flex flex-col items-center justify-center opacity-50">
+                  <div onClick={handleFollowingClose} className="flex flex-col items-center justify-center opacity-50 hover:opacity-90 cursor-pointer">
                     <div>
                       Following :
                     </div>
                     <div>
-                      {user.followers.length}
+                      {user.following.length}
                     </div>
                   </div>
-                  <div className="flex flex-col items-center justify-center opacity-50">
+                  <div onClick={handleFollowersClose} className="flex flex-col items-center justify-center opacity-50 hover:opacity-90 cursor-pointer">
                     <div>
                       Followers :
                     </div>
                     <div>
-                      {user.following.length}
+                      {user.followers.length}
                     </div>
                   </div>
                 </div>
@@ -126,10 +193,10 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
             </div>
           }
           </div>
-          {user._id != session.user.id && <div>
+          {(user?._id != session?.user.id && session) && <div>
             {!isFollowed
-            ?<button className=" w-[300px] bg-sky-500 px-2 py-1 rounded-lg">Follow</button>
-            :<button className=" w-[300px] bg-gray-500 px-2 py-1 rounded-lg">Unfollow</button>
+            ?<button onClick={handleFollow} className=" w-[300px] bg-sky-500 px-2 py-1 rounded-lg">Follow</button>
+            :<button onClick={handleUnfollow} className=" w-[300px] bg-gray-500 px-2 py-1 rounded-lg">Unfollow</button>
             }
           </div>}
 
@@ -138,7 +205,7 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
           <> 
             <div className="fixed inset-0 bg-[#1b2730] opacity-50"></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[400px] h-[200px] bg-[#06141d] rounded-xl flex items-center justify-center">
-              <button onClick={handleClose}className="absolute right-5 top-4 hover:text-red-800 duration-200 text-lg">
+              <button onClick={handleBioClose}className="absolute right-5 top-4 hover:text-red-800 duration-200 text-lg">
                 < RiCloseFill/>
               </button>
               <form onSubmit={handleBio} className="flex flex-col gap-4 items-start justify-center">
@@ -152,6 +219,28 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
                 />
                 <button type="submit" className="bg-green-700 rounded-lg w-[150px] opacity-70 hover:opacity-90 duration-200">submit</button>
               </form>
+            </div>
+          </> 
+        }
+        {followingOpen &&
+          <> 
+            <div className="z-20 fixed inset-0 bg-[#1b2730] opacity-50"></div>
+            <div className="flex-col z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[400px] h-[400px] bg-[#06141d] rounded-xl flex items-center justify-start gap-y-6 p-12 overflow-hidden overflow-y-auto">
+              <button onClick={handleFollowingClose} className="absolute right-5 top-4 hover:text-red-800 duration-200 text-lg">  < RiCloseFill/>   </button>
+                {user.following.map((data)=> {
+                  return <AccountCard key={data._id} name = {data.username} image={data.image} userId={session?.user.id} acc={data._id} Acc={data}/>
+                })}
+            </div>
+          </> 
+        }
+        {followersOpen &&
+          <> 
+            <div className="z-20 fixed inset-0 bg-[#1b2730] opacity-50"></div>
+            <div className="flex-col z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[400px] h-[400px] bg-[#06141d] rounded-xl flex items-center justify-start gap-y-6 p-12 overflow-hidden overflow-y-auto">
+              <button onClick={handleFollowersClose} className="absolute right-5 top-4 hover:text-red-800 duration-200 text-lg">  < RiCloseFill/>   </button>
+                {user.followers.map((data)=> {
+                  return <AccountCard key={data._id} name = {data.username} image={data.image} userId={session?.user.id} acc={data._id} Acc={data}/>
+                })}
             </div>
           </> 
         }
