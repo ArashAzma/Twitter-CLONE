@@ -26,10 +26,15 @@ export const PATCH = async(req, {params}) => {
                 return NextResponse("Tweet or User not found", {status:404})
             }
             tw.like=tw.like+1;
-            tw.likedBy.push(userId);
+            tw.likedBy.push(us);
             await tw.save();
-            us.likedTweets.push(params.id);
+            us.likedTweets.push(tw);
             await us.save();
+            // console.log("\n")
+            // console.log(tw)
+            // console.log("\n")
+            // console.log(us)
+            // console.log("\n")
             return new NextResponse(json.stringify("Added"), {status:200});
         }catch(err){
             return new NextResponse(JSON.stringify(err), {status:200});
@@ -43,9 +48,9 @@ export const PATCH = async(req, {params}) => {
                 return NextResponse("Tweet or User not found", {status:404})
             }
             tw.like>0 ? tw.like=tw.like-1 : tw.like=0; 
-            tw.likedBy.pull(userId);
+            tw.likedBy.pull(us);
             await tw.save();
-            us.likedTweets.pull(params.id)
+            us.likedTweets.pull(tw)
             await us.save();
             return new NextResponse("REMOVED", {status:200});
         }catch(err){
@@ -60,10 +65,10 @@ export const PATCH = async(req, {params}) => {
                 return NextResponse("Tweet or User not found", {status:404})
             }
             tw.bookedBy.push(userId);
-            console.log(tw)
+            // console.log(tw)
             await tw.save();
             us.bookedTweets.push(params.id);
-            console.log(us)
+            // console.log(us)
             await us.save();
             return new NextResponse(json.stringify("Added"), {status:200});
         }catch(err){

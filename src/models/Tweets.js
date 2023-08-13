@@ -15,9 +15,6 @@ const TweetSchema = new Schema({
         required:[true, "tag is reqiured"],
         match: [/^#[\w]+$/, "tag must start with '#' and contain only one word"]
     },
-    like:{
-        type:Number
-    },
     likedBy: [{
         type: Schema.Types.ObjectId,
         ref: 'User'

@@ -70,7 +70,6 @@ const Feed = () => {
               image={tweet.creator.image}
               tweet={tweet.tweet}
               tag={tweet.tag}
-              like={tweet.like}
               likedBy={tweet.likedBy}
               bookedBy={tweet.bookedBy}
               tagClick={handleTagClick}

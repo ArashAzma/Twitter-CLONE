@@ -18,6 +18,9 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
   const {data:session} = useSession(); 
 
   useEffect(() => {
+    console.log(data);
+  }, [data]);
+  useEffect(() => {
     const isFollowed = async() => {
       const followed = user.followers.some(follower => follower._id === session.user.id);
       if(followed){
@@ -122,7 +125,6 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
                         accId={tweet.creator._id}
                         tweet={tweet.tweet}
                         tag={tweet.tag}
-                        like={tweet.like}
                         likedBy={tweet.likedBy}
                         bookedBy={tweet.bookedBy}
                         type={dataType}
@@ -132,11 +134,11 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
               <div>
                 {dataType=="tweets"
                 ? <div className="flex flex-col justify-center items-center">
-                  <p className="font-medium ">you don't have any tweets right now</p>
+                  <p className="font-medium ">Tweets is Empty</p>
                   <Link href="/create_tweet" className="hover:scale-105 smooth duration-150 text-[#1da1f2] underline font-bold">MAKE your FIRST tweet</Link>
                   </div>
                 :  <div className="flex flex-col justify-center items-center">
-                <p className="font-medium ">you don't have any {dataType} right now</p>
+                <p className="font-medium ">{dataType} is Empty</p>
                 </div>
                 }
               </div>

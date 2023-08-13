@@ -3,7 +3,9 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import AccountCard from "@/components/accountCard";
 import {
+  RiCloseFill,
   RiHeartFill,
   RiHeartLine,
   RiBookmarkLine,
@@ -20,7 +22,6 @@ const Card = ({
   id,
   type,
   tagClick,
-  like: likeCount,
   likedBy,
   bookedBy,
 }) => {
@@ -29,9 +30,11 @@ const Card = ({
   const [dropOpen, setDropOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isBooked, setIsBooked] = useState(false);
-  const [likes, setLikes] = useState(likeCount);
+  const [likeOpen, setLikeOpen] = useState(false);
+  const [likes, setLikes] = useState(likedBy.length);
+
   useEffect(() => {
-    if (session && likedBy.includes(session.data?.user.id)) {
+    if (session && likedBy.some((data) => data._id== session.data?.user.id)) {
       setIsLiked(true);
     }
     if (session && bookedBy.includes(session.data?.user.id)) {
@@ -39,6 +42,10 @@ const Card = ({
     }
   }, [session, likedBy, bookedBy]);
 
+  const handleLikeClose = () => {
+    console.log(likedBy)
+    setLikeOpen(!likeOpen);
+  }
   const handleDelete = async () => {
     console.log(id);
     try {
@@ -73,7 +80,7 @@ const Card = ({
         if(res.ok){
           console.log("REMOVED");
         }else{
-          setLikes(likeCount);
+          setLikes(likedBy.length);
           console.log(res)
         }
       } else {
@@ -92,14 +99,14 @@ const Card = ({
         if(res.ok){
           console.log("ADDED");
         }else{
-            setLikes(likeCount);
+            setLikes(likedBy.length);
           console.log(res)
         }
       }
     } catch (error) {
       console.log(error);
       setIsLiked(!isLiked);
-      setLikes(likeCount);
+      setLikes(likedBy.length);
     }
   };
   const handleBookmark = async(e) => {
@@ -153,7 +160,7 @@ const Card = ({
   return (
     <div
       className="flex flex-col bg-[#1b2730] w-[400px] 
-    md:w-[500px] rounded-[12px] p-6 gap-y-4 relative"
+    md:w-[500px] rounded-[12px] p-6 gap-y-4 "
     >
       {(type == "tweets" && session.data?.user.id==accId) && (
         <div className="relative">
@@ -199,16 +206,18 @@ const Card = ({
       <div className="flex flex-col justify-between ">
         <div className="">{tweet}</div>
         <div className="flex justify-between mt-6">
-          <div className="flex text-xl gap-x-3 justify-center ">
-            <div onClick={handleLike}>
-              {isLiked ? (
-                <RiHeartFill className="text-red-600 cursor-pointer" />
-              ) : (
-                <RiHeartLine className="cursor-pointer hover:text-red-600 duration-200 "/>
-              )}
+          <div className="flex text-xl gap-x-4 justify-center ">
+            <div className="flex gap-x-2">
+              <div onClick={handleLike}>
+                {isLiked ? (
+                  <RiHeartFill className="text-red-600 cursor-pointer" />
+                ) : (
+                  <RiHeartLine className="cursor-pointer hover:text-red-600 duration-200 "/>
+                )}
+              </div>
+              {likes > 0 && <p onClick={handleLikeClose} className="cursor-pointer text-sm">{likes}</p>}
             </div>
-            {likes > 0 && <p className="text-sm">{likes}</p>}
-            <div onClick={handleBookmark} className="cursor-pointer">
+            <div onClick={handleBookmark} className="flex cursor-pointer items-center text-[16px]">
               {isBooked? <RiBookmarkFill /> : <RiBookmarkLine />}
             </div>
           </div>
@@ -220,6 +229,17 @@ const Card = ({
           </div>
         </div>
       </div>
+      {likeOpen &&
+          <> 
+            <div className="z-20 fixed inset-0 bg-[#1b2730] opacity-50"></div>
+            <div className="flex-col z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[400px] h-[400px] bg-[#06141d] rounded-xl flex items-center justify-start gap-y-6 p-12 overflow-hidden overflow-y-auto">
+              <button onClick={handleLikeClose} className="absolute right-5 top-4 hover:text-red-800 duration-200 text-lg">  < RiCloseFill/>   </button>
+                {likedBy.map((data)=> {
+                  return <AccountCard key={data._id} name = {data.username} image={data.image} userId={session.data.user.id} acc={data._id} Acc={data}/>
+                })}
+            </div>
+          </> 
+        }
     </div>
   );
 };
