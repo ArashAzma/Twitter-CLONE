@@ -1,14 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Form from "@/components/form";
 import { useSession } from "next-auth/react";
+import Form from "@/components/form";
 const Edit = () => {
-  const { data } = useSession();
+  const { status, data } = useSession();
   const router = useRouter();
   const searchParam = useSearchParams();
   const id = searchParam.get("id");
   const [newTweet, setNewTweet] = useState({ body: "", tag: "" });
+  if (status === "unauthenticated") {
+    router.push("/");
+  }
 
   useEffect(() => {
     const fetchData = async () => {

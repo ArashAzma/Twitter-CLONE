@@ -30,6 +30,7 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
 
     if(session?.user) isFollowed();
   },[session?.user && user])
+
   const handleBioClose = (reason) => {
     if (reason === 'clickaway') {
       return;
@@ -109,13 +110,13 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
   }
   return (
     <div className="flex flex-col lg:flex-row-reverse  lg:items-start px-[75px] items-center justify-end gap-y-8 relative">
-      <div className='flex flex-col gap-4 md:mx-[75px] max-h-[82vh] overflow-hidden overflow-y-auto items-center'>
-          <div className="grid grid-cols-3 gap-4 divide-x divide-gray-400  items-center bg-[#1b2730] mx-6 py-2 rounded-xl w-[400px] md:w-[500px]">
+      <div className='flex flex-col gap-4 md:mx-[75px] max-h-[82vh] items-center mx-6 relative'>
+          <div className="absolute grid grid-cols-3 gap-4 divide-x divide-gray-400 items-center bg-[#1b2730] py-2 rounded-xl w-[400px] md:w-[500px]">
             <button onClick={()=>{setData(tweets); setDataType("tweets")}} className="focus:opacity-100 focus:text-[#1da1f2] opacity-40 duration-200 ">tweets</button>
             <button onClick={()=>{setData(likedTweets); setDataType("liked tweet")}}className="focus:opacity-100 focus:text-[#1da1f2] opacity-40 duration-200 ">likes</button>
             <button onClick={()=>{setData(bookedTweets); setDataType("bookmarks")}}className="focus:opacity-100 focus:text-[#1da1f2] opacity-40 duration-200 ">bookmarks</button>
           </div>
-          <div className="flex flex-col gap-4 justify-center">
+          <div className="flex flex-col gap-4 justify-start mt-16 overflow-hidden overflow-y-auto">
             {data.length!==0? data.map((tweet)=> {
                 return <Card 
                         key={tweet._id}
@@ -128,6 +129,7 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
                         likedBy={tweet.likedBy}
                         bookedBy={tweet.bookedBy}
                         type={dataType}
+                        tagClick={()=>{}}
                     />
             }) :
             <div className="flex w-[400px] md:w-[500px] h-[400px] justify-center items-center"> 
