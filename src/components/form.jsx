@@ -4,7 +4,7 @@ const Form = ({ type, tweet, setTweet, handleSubmit }) => {
   return <div>
 
             {type==="Create"
-            ?<form onSubmit={handleSubmit} className="flex flex-col w-[275px] md:w-[400px]  gap-y-8">
+            ?<form onSubmit={handleSubmit} className="flex flex-col w-[275px] md:w-[400px] gap-y-8">
                 <div className="flex flex-col gap-y-4">
                     <textarea 
                         value={tweet.body}

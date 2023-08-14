@@ -12,7 +12,7 @@ const TweetSchema = new Schema({
     },
     tag:{
         type:String,
-        required:[true, "tag is reqiured"],
+        // required:[true, "tag is reqiured"],
         match: [/^#[\w]+$/, "tag must start with '#' and contain only one word"]
     },
     likedBy: [{
