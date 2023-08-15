@@ -32,7 +32,7 @@ const Feed = () => {
     }
   }, [Data]);
   if (error) {
-    // return <p>Error fetching data: {error.message}</p>;
+    return <p className="flex items-center justify-center">Error fetching data: {error.message}</p>;
   }
   const handleSearchChange = (event) => {
     const newSearchText = event.target.value;
@@ -52,6 +52,7 @@ const Feed = () => {
     })
     setSearch(tagSearch);
     setSearchText(tag);
+    setShowInput(!showInput);
   }
   const createTweet = async (e) => {
     e.preventDefault();

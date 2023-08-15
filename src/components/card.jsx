@@ -237,7 +237,7 @@ const Card = ({
             <div className="flex-col z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[350px] md:w-[400px] h-[400px] bg-[#06141d] rounded-xl flex items-center justify-start gap-y-6 p-12 overflow-hidden overflow-y-auto">
               <button onClick={handleLikeClose} className="absolute right-5 top-4 hover:text-red-800 duration-200 text-lg">  < RiCloseFill/>   </button>
                 {likedBy.map((data)=> {
-                  return <AccountCard key={data._id} name = {data.username} image={data.image} userId={session.data.user.id} acc={data._id} Acc={data}/>
+                  return <AccountCard key={data._id} name = {data.username} image={data.image} userId={session.data?.user.id} acc={data._id} Acc={data}/>
                 })}
             </div>
           </> 
