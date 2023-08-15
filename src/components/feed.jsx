@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 import {useRouter} from 'next/navigation';
 import ReactLoading from 'react-loading';
 import Card from '@/components/card';
-import Form from "@/components/feedForm";
 import useSWR from 'swr';
 
 const fetchData = async () => {
@@ -54,28 +53,6 @@ const Feed = () => {
     setSearchText(tag);
     setShowInput(!showInput);
   }
-  const createTweet = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("api/tweet/new", {
-        method: "POST",
-        body: JSON.stringify({
-          userId: data?.user.id,
-          text: tweet.body,
-          tag: tweet.tag,
-        }),
-      });
-      if (res.ok) {
-        location.reload();
-      } else {
-        const errorData = await res.json();
-        setErrors(errorData);
-        console.log(errorData);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const handleCloseButton = () => {
     setShowInput(!showInput); 
     setSearchText('');
@@ -108,21 +85,6 @@ const Feed = () => {
           </>
         </>
     <div className="flex flex-col items-center gap-8">
-
-      {data?.user && <div className="absolute lg:left-[424px] lg:top-[20px] flex-col w-[100px] h-[400px] justify-center items-center gap-4">
-        <Form
-          type={"Create"}
-          tweet={tweet}
-          setTweet={setTweet}
-          handleSubmit={createTweet}
-        />
-        {errors && (
-          <div className="absolute lg:left-15 w-[300px] flex justify-start text-red-900 text-sm font-semibold">
-            <div>{errors.errors.tweet?.message}</div>
-            <div>{errors.errors.tag?.message}</div>
-          </div>
-        )}
-      </div>}
 
       <div className="flex flex-col px-8 gap-4 md:mx-[100px] h-[83vh] items-center overflow-hidden overflow-y-auto">
         {!loading ? (
