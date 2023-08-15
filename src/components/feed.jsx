@@ -1,34 +1,39 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { RiSearch2Line } from "react-icons/ri";
+import { RiSearch2Line, RiCloseFill } from "react-icons/ri";
 import { useSession } from "next-auth/react";
 import {useRouter} from 'next/navigation';
 import ReactLoading from 'react-loading';
 import Card from '@/components/card';
 import Form from "@/components/feedForm";
+import useSWR from 'swr';
+
+const fetchData = async () => {
+  const res = await fetch('/api/tweet');
+  const data = await res.json();
+  return data;
+};
+
 
 const Feed = () => {
-  const [Data, setData] = useState([]);
+  const { data:Data, error } = useSWR('/api/tweet', fetchData);
   const [search, setSearch] = useState([]);
+  const [showInput, setShowInput] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const {status, data} = useSession();
   const [errors, setErrors] = useState(null);
   const [tweet, setTweet] = useState({ body: "", tag: "" });
   const router = useRouter();
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/tweet');
-        const newData = await res.json();
-        setData(newData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, [status==="authenticated" || status==="unauthenticated"]);
+    if (Data) {
+      setLoading(false);
+    }
+  }, [Data]);
+  if (error) {
+    // return <p>Error fetching data: {error.message}</p>;
+  }
   const handleSearchChange = (event) => {
     const newSearchText = event.target.value;
     setSearchText(newSearchText);
@@ -60,9 +65,7 @@ const Feed = () => {
         }),
       });
       if (res.ok) {
-        console.log("SAVED");
         location.reload();
-        console.log("ref");
       } else {
         const errorData = await res.json();
         setErrors(errorData);
@@ -72,23 +75,40 @@ const Feed = () => {
       console.log(error);
     }
   };
+  const handleCloseButton = () => {
+    setShowInput(!showInput); 
+    setSearchText('');
+  }
+
   const renderCards = searchText.length > 0 ? search : Data;
   return (
     <>
-      <>
-        <input
-          type="text"
-          placeholder={"Search "}
-          value={searchText}
-          onChange={handleSearchChange}
-          required
-          className="flex rounded-xl bg-[#1b2730] p-2 absolute top-[20px] left-[80px]"
-        />
-        <RiSearch2Line className="absolute top-[32px] left-[290px] opacity-70"/>
-      </>
+       <>
+        <button
+          onClick={() => setShowInput(!showInput)}
+          className={`${showInput? '-top-[300px]': 'top-[30px]'} ${searchText.length>0? 'text-green-600': ''} absolute left-[80px] text-[20px]`}
+        >
+          <RiSearch2Line className="hover:scale-110 duration-200" />
+        </button>
+          <>
+            <div className={`absolute ${!showInput? '-top-[100px] duration-300 smooth': 'top-[40px] duration-300 smooth'} p-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[350px] md:w-[400px] py-2 bg-[#06141d] rounded-xl flex items-center justify-center`}>
+            <button onClick={handleCloseButton} className="absolute right-5 top-5 hover:text-red-800 duration-200 text-lg">
+                < RiCloseFill/>
+              </button>
+              <input
+                type="text"
+                placeholder={"Search "}
+                value={searchText}
+                onChange={handleSearchChange}
+                required
+                className="flex w-full rounded-xl bg-[#1b2730] p-2"
+              />
+            </div>
+          </>
+        </>
     <div className="flex flex-col items-center gap-8">
 
-      {data?.user && <div className="hidden lg:block lg:absolute lg:left-[424px] lg:top-[20px] flex-col w-[100px] h-[400px] justify-center items-center gap-4">
+      {data?.user && <div className="absolute lg:left-[424px] lg:top-[20px] flex-col w-[100px] h-[400px] justify-center items-center gap-4">
         <Form
           type={"Create"}
           tweet={tweet}

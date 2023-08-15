@@ -4,7 +4,17 @@ import { useSession } from 'next-auth/react';
 import {useRouter} from 'next/navigation'
 import ProfilePage from '@/components/profilePage';
 import ReactLoading from "react-loading";
+import useSWR from 'swr'; 
 
+const fetchData = async (data) => {
+  console.log(data);
+  const res = await fetch(`/api/users/${data.user.id}/tweets`);
+  const DATA = await res.json();
+  console.log(DATA)
+  return DATA;
+};
+ 
+ 
 const Profile = () => {
   const { status, data } = useSession();
   const [tweets, setTweets] = useState([]);
@@ -13,24 +23,18 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const router = useRouter();
+  const { data: Data, error } = useSWR(`/api/users/${data?.user.id}/tweets`, () => fetchData(data));
   
   if(status==="unauthenticated"){
     router.push("/");
   }
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`/api/users/${data.user.id}/tweets`);
-        const body = await res.json();
-        setTweets(body.tweets);
-        setLikedTweets(body.likedTweets);
-        setBookedTweets(body.bookedTweets);
-        setLoading(false); 
-      } catch (error) {
-        console.error(error);
-        setLoading(false);
-      }
-    };
+    if (Data) {
+      setTweets(Data.tweets);
+      setLikedTweets(Data.likedTweets);
+      setBookedTweets(Data.bookedTweets);
+      setLoading(false);
+    }
     const fetchUser = async() => {
       try {
         const res = await fetch(`api/users/${data.user.id}`);
@@ -42,8 +46,8 @@ const Profile = () => {
         console.log(error);
       }
     }
-    if (data?.user.id){ fetchData(); fetchUser();} 
-  }, [data?.user.id]);
+    if (data?.user.id){fetchUser();} 
+  }, [data?.user.id, Data]);
   return (
     <div>
       {loading ? (

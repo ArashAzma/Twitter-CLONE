@@ -6,6 +6,7 @@ import Card from "@/components/card";
 import Link from "next/link";
 import Image from "next/image";
 import AccountCard from "@/components/accountCard";
+import ReactLoading from "react-loading";
 
 const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
   const [data, setData] = useState(tweets);
@@ -18,8 +19,9 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
   const {data:session} = useSession(); 
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    console.log(user);
+    console.log(tweets);
+  }, []);
   useEffect(() => {
     const isFollowed = async() => {
       const followed = user.followers.some(follower => follower._id === session.user.id);
@@ -61,6 +63,7 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
       if(res.ok){
         console.log("Updated Bio")
         setBioOpen(false);
+        location.reload();
       }
     }catch(err){
       console.log(err);
@@ -111,7 +114,7 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
   return (
     <div className="flex flex-col lg:flex-row-reverse  lg:items-start px-[75px] items-center justify-end gap-y-8 relative">
       <div className='flex flex-col gap-4 md:mx-[75px] max-h-[82vh] items-center mx-6 relative'>
-          <div className="absolute grid grid-cols-3 gap-4 divide-x divide-gray-400 items-center bg-[#1b2730] py-2 rounded-xl w-[400px] md:w-[500px]">
+          <div className="absolute grid grid-cols-3 gap-4 divide-x divide-gray-400 items-center bg-[#1b2730] py-2 rounded-xl w-[300px] md:w-[500px]">
             <button onClick={()=>{setData(tweets); setDataType("tweets")}} className="focus:opacity-100 focus:text-[#1da1f2] opacity-40 duration-200 ">tweets</button>
             <button onClick={()=>{setData(likedTweets); setDataType("liked tweet")}}className="focus:opacity-100 focus:text-[#1da1f2] opacity-40 duration-200 ">likes</button>
             <button onClick={()=>{setData(bookedTweets); setDataType("bookmarks")}}className="focus:opacity-100 focus:text-[#1da1f2] opacity-40 duration-200 ">bookmarks</button>
@@ -193,7 +196,12 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
               </div>
             </div>
           : <div>
-              LOading
+              <div className="flex justify-center items-center h-[85vh]"><ReactLoading
+                  type="spinningBubbles"
+                  color="#1da1f2"
+                  height={100}
+                  width={50}
+              /></div>
             </div>
           }
           </div>
@@ -208,7 +216,7 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
         {bioOpen &&
           <> 
             <div className="fixed inset-0 bg-[#1b2730] opacity-50"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[400px] h-[200px] bg-[#06141d] rounded-xl flex items-center justify-center">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[350px] md:w-[400px] h-[200px] bg-[#06141d] rounded-xl flex items-center justify-center">
               <button onClick={handleBioClose}className="absolute right-5 top-4 hover:text-red-800 duration-200 text-lg">
                 < RiCloseFill/>
               </button>
@@ -229,7 +237,7 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
         {followingOpen &&
           <> 
             <div className="z-20 fixed inset-0 bg-[#1b2730] opacity-50"></div>
-            <div className="flex-col z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[400px] h-[400px] bg-[#06141d] rounded-xl flex items-center justify-start gap-y-6 p-12 overflow-hidden overflow-y-auto">
+            <div className="flex-col z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[350px] md:w-[400px] h-[400px] bg-[#06141d] rounded-xl flex items-center justify-start gap-y-6 p-10 overflow-hidden overflow-y-auto">
               <button onClick={handleFollowingClose} className="absolute right-5 top-4 hover:text-red-800 duration-200 text-lg">  < RiCloseFill/>   </button>
                 {user.following.map((data)=> {
                   return <AccountCard key={data._id} name = {data.username} image={data.image} userId={session?.user.id} acc={data._id} Acc={data}/>
@@ -240,7 +248,7 @@ const ProfilePage = ({user, tweets, likedTweets, bookedTweets}) => {
         {followersOpen &&
           <> 
             <div className="z-20 fixed inset-0 bg-[#1b2730] opacity-50"></div>
-            <div className="flex-col z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[400px] h-[400px] bg-[#06141d] rounded-xl flex items-center justify-start gap-y-6 p-12 overflow-hidden overflow-y-auto">
+            <div className="flex-col z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[350px] md:w-[400px] h-[400px] bg-[#06141d] rounded-xl flex items-center justify-start gap-y-6 p-10 overflow-hidden overflow-y-auto">
               <button onClick={handleFollowersClose} className="absolute right-5 top-4 hover:text-red-800 duration-200 text-lg">  < RiCloseFill/>   </button>
                 {user.followers.map((data)=> {
                   return <AccountCard key={data._id} name = {data.username} image={data.image} userId={session?.user.id} acc={data._id} Acc={data}/>

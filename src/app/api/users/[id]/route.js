@@ -5,9 +5,7 @@ import { NextResponse } from "next/server";
 export const GET = async (res, {params}) => {
     try{
         await connectToDB();
-        // console.log(params.id)
-        const user= await User.findById(params.id).populate('following').populate('followers');
-        // console.log(user)
+        const user= await User.findById(params.id).populate('following').sort({ updatedAt: -1 }).populate('followers').sort({ updatedAt: -1 });
         if(!user){
             return new NextResponse("user doesnt Exist", {status:404});
         }
@@ -19,14 +17,11 @@ export const GET = async (res, {params}) => {
 export const PATCH = async(res, {params}) => {
     try{
         const {bio} = await res.json();
-        // console.log(bio);
         const user = await User.findById(params.id);
-        // console.log(user);
         if(!user){
             throw new NextResponse("User not found", {status:404});
         }
         user.bio = bio;
-        // console.log(user);
         await user.save();
         return new NextResponse(JSON.stringify("Added bio"), {status:200});
     }catch(err){

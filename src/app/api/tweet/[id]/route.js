@@ -30,11 +30,6 @@ export const PATCH = async(req, {params}) => {
             await tw.save();
             us.likedTweets.push(tw);
             await us.save();
-            // console.log("\n")
-            // console.log(tw)
-            // console.log("\n")
-            // console.log(us)
-            // console.log("\n")
             return new NextResponse(json.stringify("Added"), {status:200});
         }catch(err){
             return new NextResponse(JSON.stringify(err), {status:200});

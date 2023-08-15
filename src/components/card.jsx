@@ -68,7 +68,7 @@ const Card = ({
       if (isLiked) {
         setIsLiked(!isLiked);
         setLikes(likes-1);
-        const res = await fetch(`api/tweet/${id}`, {
+        const res = await fetch(`/api/tweet/${id}`, {
           method: "PATCH",
           body: JSON.stringify({
             action: "removelike",
@@ -81,13 +81,14 @@ const Card = ({
           console.log("REMOVED");
         }else{
           setLikes(likedBy.length);
+          setIsLiked(!isLiked);
           console.log(res)
         }
       } else {
         setIsLiked(!isLiked);
         setLikes(likes+1);
-        console.log(session.data?.user.id)
-        const res = await fetch(`api/tweet/${id}`, {
+        console.log(id)
+        const res = await fetch(`/api/tweet/${id}`, {
           method: "PATCH",
           body: JSON.stringify({
             action: "addlike",
@@ -99,7 +100,8 @@ const Card = ({
         if(res.ok){
           console.log("ADDED");
         }else{
-            setLikes(likedBy.length);
+          setLikes(likedBy.length);
+          setIsLiked(!isLiked);
           console.log(res)
         }
       }
@@ -114,7 +116,7 @@ const Card = ({
     try {
       if(!isBooked){
         setIsBooked(true)
-        const res = await fetch(`api/tweet/${id}`,{
+        const res = await fetch(`/api/tweet/${id}`,{
           method:"PATCH",
           body:JSON.stringify({
             action: "addBookmark",
@@ -159,7 +161,7 @@ const Card = ({
   }
   return (
     <div
-      className="flex flex-col bg-[#1b2730] w-[400px] 
+      className="flex flex-col bg-[#1b2730] w-[300px] 
     md:w-[500px] rounded-[12px] p-6 gap-y-4 "
     >
       {(type == "tweets" && session.data?.user.id==accId) && (
@@ -171,7 +173,7 @@ const Card = ({
             <RiMoreLine />
           </div>
           {dropOpen && (
-            <div className="absolute flex bg-[#06141d] w-[200px] p-6 right-5 top-3 items-start rounded-lg">
+            <div className="absolute z-20 flex bg-[#06141d] w-[200px] p-6 right-5 top-3 items-start rounded-lg">
               <ul
                 role="list"
                 className="marker:text-[#1da1f2] list-disc pl-5 space-y-3 text-slate-400 cursor-pointer"
@@ -232,7 +234,7 @@ const Card = ({
       {likeOpen &&
           <> 
             <div className="z-20 fixed inset-0 bg-[#1b2730] opacity-50"></div>
-            <div className="flex-col z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[400px] h-[400px] bg-[#06141d] rounded-xl flex items-center justify-start gap-y-6 p-12 overflow-hidden overflow-y-auto">
+            <div className="flex-col z-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[350px] md:w-[400px] h-[400px] bg-[#06141d] rounded-xl flex items-center justify-start gap-y-6 p-12 overflow-hidden overflow-y-auto">
               <button onClick={handleLikeClose} className="absolute right-5 top-4 hover:text-red-800 duration-200 text-lg">  < RiCloseFill/>   </button>
                 {likedBy.map((data)=> {
                   return <AccountCard key={data._id} name = {data.username} image={data.image} userId={session.data.user.id} acc={data._id} Acc={data}/>

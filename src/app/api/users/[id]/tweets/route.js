@@ -6,11 +6,12 @@ import User from '@/models/user';
 export const GET = async(req, {params}) => {
     try {
         await connectToDB();
-        const tweets = await Tweet.find({creator:params.id}).populate('creator').populate('likedBy')
+        const tweets = await Tweet.find({creator:params.id}).populate('creator').populate('likedBy').sort({ createdAt: -1 })
         const user = await User.findById(params.id)
         .populate('likedTweets')
         .populate({
           path: 'likedTweets',
+          options: { sort: { updatedAt: -1 } },
           populate: {
             path: 'creator likedBy',
           },
@@ -18,11 +19,11 @@ export const GET = async(req, {params}) => {
         .populate('bookedTweets')
         .populate({
           path: 'bookedTweets',
+          options: { sort: { updatedAt: -1 } },
           populate: {
             path: 'creator likedBy',
           },
-        });
-          console.log(tweets);
+        })
         return new Response(JSON.stringify({tweets, likedTweets:user.likedTweets, bookedTweets:user.bookedTweets}), {status:200})    
     } catch (error) {
         console.log(error)

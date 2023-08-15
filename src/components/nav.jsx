@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { signIn, signOut, useSession} from "next-auth/react";
 import { RiTwitterFill, RiMenu3Fill } from "react-icons/ri";
 import AccountMenu from "./accountMenu";
-import Profile from "@/components/profile";
 import Link from "next/link";
 import Image from "next/image"
 
