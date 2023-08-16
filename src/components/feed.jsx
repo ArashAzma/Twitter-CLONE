@@ -1,32 +1,18 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { RiSearch2Line, RiCloseFill } from "react-icons/ri";
+import { useContext } from 'react';
+import { loadingContext } from '@/context/loadingProvider';
 import ReactLoading from 'react-loading';
 import Card from '@/components/card';
-import useSWR from 'swr';
 
-const fetchData = async () => {
-  const res = await fetch('/api/tweet');
-  const data = await res.json();
-  return data;
-};
 
-const Feed = () => {
-  const { data, error } = useSWR('/api/tweet', ()=>fetchData(),{ refreshInterval: 10,});
+const Feed = ({data}) => {
   const [search, setSearch] = useState([]);
   const [showInput, setShowInput] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
-
-  useEffect(() => {
-    if (data) {
-      console.log(data)
-      setLoading(false);
-    }
-  }, [data]);
-  if (error) {
-    return <p className="flex items-center justify-center">Error fetching data: {error.message}</p>;
-  }
+  const {loading} = useContext(loadingContext);
+  
   const handleSearchChange = (event) => {
     const newSearchText = event.target.value;
     setSearchText(newSearchText);

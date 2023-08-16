@@ -7,10 +7,8 @@ import ReactLoading from "react-loading";
 import useSWR from 'swr'; 
 
 const fetchData = async (data) => {
-  console.log(data);
   const res = await fetch(`/api/users/${data.user.id}/tweets`);
   const DATA = await res.json();
-  console.log(DATA)
   return DATA;
 };
  
@@ -32,7 +30,7 @@ const Profile = () => {
       setTweets(Data.tweets);
       setLikedTweets(Data.likedTweets);
       setBookedTweets(Data.bookedTweets);
-      console.log(Data)
+      // console.log(Data)
       setLoading(false);
     }
     const fetchUser = async() => {

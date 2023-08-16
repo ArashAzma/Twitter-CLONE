@@ -198,12 +198,12 @@ const ProfilePage = ({ user, tweets, likedTweets, bookedTweets }) => {
               }
               <div className="absolute top-24 ">
                 <div className="flex gap-x-2 mb-1 justify-between items-center">
-                  <div className="opacity-50">username :</div>
-                  <div className="opacity-90 font-bold">{user.username}</div>
+                  <div className="opacity-50 text-[14px]">username :</div>
+                  <div className="font-semibold text-[14px]">{user.username}</div>
                 </div>
                 <div className="flex gap-x-2 mb-3 justify-between items-center">
-                  <div className="opacity-50">email :</div>
-                  <div className="opacity-90 font-bold">{user.email}</div>
+                  <div className="opacity-50 text-[14px]">email :</div>
+                  <div className="font-semibold text-[14px]">{user.email}</div>
                 </div>
                 <div className="flex gap-x-2 mb-5 justify-between items-center">
                   <div className="opacity-50 text-sm">bio :</div>

@@ -1,7 +1,8 @@
 import Nav from "@/components/nav";
 import "./globals.css";
-import { Inter } from "next/font/google";
 import Provider from "@/components/provider";
+import LoadingProvider  from "@/context/loadingProvider";
+import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,14 +14,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <meta
-        name="google-site-verification"
-        content="-RtI_VGUNGghGcZS7etjIOKLw-ci9m3fzX425FidiEw"
-      />
       <body className={inter.className}>
         <Provider>
-          <Nav />
-          {children}
+          <LoadingProvider>
+            <Nav />
+            {children}
+          </LoadingProvider>
         </Provider>
       </body>
     </html>
