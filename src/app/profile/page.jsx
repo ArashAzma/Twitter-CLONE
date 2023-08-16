@@ -23,9 +23,9 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const router = useRouter();
-  const { data: Data, error } = useSWR(`/api/users/${data?.user.id}/tweets`, () => fetchData(data));
+  const { data: Data, error } = useSWR(`/api/users/${data?.user.id}/tweets`, () => fetchData(data),{ refreshInterval: 100,});
   
-  if(status==="unauthenticated"){
+  if(status==="unauthenticated"){    
     router.push("/");
   }
   useEffect(() => {

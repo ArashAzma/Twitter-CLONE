@@ -24,6 +24,7 @@ const Card = ({
   tagClick,
   likedBy,
   bookedBy,
+  data
 }) => {
   const session = useSession();
   const router = useRouter();
@@ -221,6 +222,9 @@ const Card = ({
             </div>
             <div onClick={handleBookmark} className="flex cursor-pointer items-center text-[16px]">
               {isBooked? <RiBookmarkFill /> : <RiBookmarkLine />}
+            </div>
+            <div className="text-sm opacity-50">
+              {data.slice(0, 10)}
             </div>
           </div>
           <div

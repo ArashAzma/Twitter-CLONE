@@ -1,8 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { RiSearch2Line, RiCloseFill } from "react-icons/ri";
-import { useSession } from "next-auth/react";
-import {useRouter} from 'next/navigation';
 import ReactLoading from 'react-loading';
 import Card from '@/components/card';
 import useSWR from 'swr';
@@ -13,23 +11,18 @@ const fetchData = async () => {
   return data;
 };
 
-
 const Feed = () => {
-  const { data:Data, error } = useSWR('/api/tweet', fetchData);
+  const { data, error } = useSWR('/api/tweet', fetchData,{ refreshInterval: 1000,});
   const [search, setSearch] = useState([]);
   const [showInput, setShowInput] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
-  const {status, data} = useSession();
-  const [errors, setErrors] = useState(null);
-  const [tweet, setTweet] = useState({ body: "", tag: "" });
-  const router = useRouter();
 
   useEffect(() => {
-    if (Data) {
+    if (data) {
       setLoading(false);
     }
-  }, [Data]);
+  }, [data]);
   if (error) {
     return <p className="flex items-center justify-center">Error fetching data: {error.message}</p>;
   }
@@ -37,7 +30,7 @@ const Feed = () => {
     const newSearchText = event.target.value;
     setSearchText(newSearchText);
 
-    const updatedSearch = Data.filter((item) => {
+    const updatedSearch = data.filter((item) => {
       const tagIncluded = newSearchText.startsWith('#') && item.tag.includes(newSearchText);
       const idIncluded = newSearchText.startsWith('@') && item.creator.username.includes(newSearchText.slice(1));
       const tweetIncluded = item.tweet.includes(newSearchText);
@@ -46,7 +39,7 @@ const Feed = () => {
     setSearch(updatedSearch);
   };
   const handleTagClick = (tag) => {
-    const tagSearch = Data.filter((tweet)=> {
+    const tagSearch = data.filter((tweet)=> {
       return tweet.tag.includes(tag);
     })
     setSearch(tagSearch);
@@ -58,7 +51,7 @@ const Feed = () => {
     setSearchText('');
   }
 
-  const renderCards = searchText.length > 0 ? search : Data;
+  const renderCards = searchText.length > 0 ? search : data;
   return (
     <>
        <>
@@ -100,6 +93,7 @@ const Feed = () => {
               likedBy={tweet.likedBy}
               bookedBy={tweet.bookedBy}
               tagClick={handleTagClick}
+              data={tweet.createdAt}
             />
           ))
         ) : (

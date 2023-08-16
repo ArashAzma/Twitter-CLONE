@@ -17,7 +17,6 @@ const Form = ({ type, tweet, setTweet, handleSubmit }) => {
                         value={tweet.tag}
                         onChange={(e) => setTweet({...tweet, tag: e.target.value})}
                         type='text'
-                        required
                         placeholder="#Tag"
                         className=" rounded-xl bg-transparent border-2 px-2 py-1 border-opacity-50"
                     />
