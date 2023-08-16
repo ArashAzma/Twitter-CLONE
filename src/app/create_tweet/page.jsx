@@ -3,13 +3,13 @@ import Form from "@/components/form";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-// import useSWR from 'swr';
+import {useSWRConfig} from 'swr';
 const Create = () => {
-  // const {mutate} = useSWR();
   const { status, data } = useSession();
   const [errors, setErrors] = useState(null);
   const [tweet, setTweet] = useState({ body: "", tag: "" });
   const router = useRouter();
+  const { mutate } = useSWRConfig()
   if (status === "unauthenticated") {
     router.push("/");
   }
@@ -27,7 +27,7 @@ const Create = () => {
       });
       if (res.ok) {
         console.log("SAVED");
-        // mutate('/api/tweet')
+        mutate('/api/tweet')
         router.push("/");
       } else {
         const errorData = await res.json();

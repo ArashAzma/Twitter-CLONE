@@ -134,7 +134,7 @@ const Card = ({
         }
       }else{
         setIsBooked(false);
-        const res = await fetch(`api/tweet/${id}`,{
+        const res = await fetch(`/api/tweet/${id}`,{
           method:"PATCH",
           body:JSON.stringify({
             action: "removeBookmark",

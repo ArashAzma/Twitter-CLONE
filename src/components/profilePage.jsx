@@ -141,7 +141,7 @@ const ProfilePage = ({ user, tweets, likedTweets, bookedTweets }) => {
           </button>
         </div>
         <div className="flex flex-col gap-4 justify-start mt-16 overflow-hidden overflow-y-auto">
-          {data.length !== 0 ? (
+          {(data && data?.length !== 0) ? (
             data.map((tweet) => {
               return (
                 <Card

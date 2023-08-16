@@ -10,12 +10,12 @@ const fetchData = async () => {
   return DATA;
 };
 export default function Home() {
-  const { data, error } = useSWR('/api/tweet', fetchData,{ refreshInterval: 10,});
+  const { data, error } = useSWR('/api/tweet', fetchData);
   const {loading, setLoading} = useContext(loadingContext);
 
   useEffect(() => {
     if (data) {
-      // console.log(data)
+      console.log(data)
       setLoading(false);
     }
   }, [data]);

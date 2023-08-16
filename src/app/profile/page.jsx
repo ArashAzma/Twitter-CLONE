@@ -30,7 +30,7 @@ const Profile = () => {
       setTweets(Data.tweets);
       setLikedTweets(Data.likedTweets);
       setBookedTweets(Data.bookedTweets);
-      // console.log(Data)
+      console.log(Data)
       setLoading(false);
     }
     const fetchUser = async() => {
