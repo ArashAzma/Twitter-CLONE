@@ -12,7 +12,7 @@ const fetchData = async () => {
 };
 
 const Feed = () => {
-  const { data, error } = useSWR('/api/tweet', fetchData,{ refreshInterval: 1000,});
+  const { data, error } = useSWR('/api/tweet', fetchData,{ refreshInterval: 10,});
   const [search, setSearch] = useState([]);
   const [showInput, setShowInput] = useState(false);
   const [loading, setLoading] = useState(true);

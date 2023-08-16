@@ -13,7 +13,7 @@ const AccountProfile = ({params}) => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const res = await fetch(`/api/users/${accId}/tweets`, { cache: 'no-store' });
+            const res = await fetch(`/api/users/${accId}/tweets`, { next: { revalidate: 10 }});
             const body = await res.json();
             setTweets(body.tweets);
             setLikedTweets(body.likedTweets);
