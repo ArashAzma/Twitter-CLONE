@@ -14,7 +14,6 @@ const fetchData = async (data) => {
   return DATA;
 };
  
- 
 const Profile = () => {
   const { status, data } = useSession();
   const [tweets, setTweets] = useState([]);
@@ -23,7 +22,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const router = useRouter();
-  const { data: Data, error } = useSWR(`/api/users/${data?.user.id}/tweets`, () => fetchData(data),{ refreshInterval: 100,});
+  const { data: Data, error } = useSWR(`/api/users/${data?.user.id}/tweets`, () => fetchData(data),{ refreshInterval: 10,});
   
   if(status==="unauthenticated"){    
     router.push("/");
@@ -33,6 +32,7 @@ const Profile = () => {
       setTweets(Data.tweets);
       setLikedTweets(Data.likedTweets);
       setBookedTweets(Data.bookedTweets);
+      console.log(Data)
       setLoading(false);
     }
     const fetchUser = async() => {

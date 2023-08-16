@@ -17,11 +17,6 @@ const ProfilePage = ({ user, tweets, likedTweets, bookedTweets }) => {
   const [isFollowed, setIsFollowed] = useState(false);
   const [bio, setBio] = useState("");
   const { data: session } = useSession();
-
-  useEffect(() => {
-    console.log(user);
-    console.log(tweets);
-  }, []);
   useEffect(() => {
     const isFollowed = async () => {
       const followed = user?.followers.some(
