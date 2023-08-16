@@ -1,7 +1,6 @@
 import { connectToDB } from "@/utils/db";
 import Tweet from "@/models/Tweets";
-export const runtime = 'edge';
-
+export const runtime = 'nodejs';
 export const GET = async (res) => {
   try {
     await connectToDB();
