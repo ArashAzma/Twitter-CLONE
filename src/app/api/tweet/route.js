@@ -18,6 +18,6 @@ export const GET = async (res) => {
           },
      });
   } catch (error) {
-    return new Response(error, { status: 500 });
+    return new Response(JSON.stringify(error), { status: 500 });
   }
 };

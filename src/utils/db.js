@@ -20,15 +20,4 @@ export const connectToDB = async () => {
       } catch (error) {
         console.log(error);
       }
-
-
 }
-const connect = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI_COMPASS);
-    console.log("CONNECTED")
-  } catch (error) {
-    throw new Error(error)
-}
-};
-export default connect; 

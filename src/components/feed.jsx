@@ -13,6 +13,7 @@ const Feed = ({data}) => {
   const [searchText, setSearchText] = useState('');
   const {loading} = useContext(loadingContext);
   
+  console.log(data)
   const handleSearchChange = (event) => {
     const newSearchText = event.target.value;
     setSearchText(newSearchText);
@@ -80,7 +81,7 @@ const Feed = ({data}) => {
               likedBy={tweet.likedBy}
               bookedBy={tweet.bookedBy}
               tagClick={handleTagClick}
-              data={tweet.createdAt}
+              date={tweet.createdAt.toString().slice(0,10)}
             />
           ))
         ) : (

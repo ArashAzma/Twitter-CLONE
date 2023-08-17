@@ -24,7 +24,7 @@ const Card = ({
   tagClick,
   likedBy,
   bookedBy,
-  data
+  date
 }) => {
   const session = useSession();
   const router = useRouter();
@@ -224,7 +224,7 @@ const Card = ({
               {isBooked? <RiBookmarkFill /> : <RiBookmarkLine />}
             </div>
             <div className="text-sm opacity-50">
-              {data.slice(0, 10)}
+              {date}
             </div>
           </div>
           <div
