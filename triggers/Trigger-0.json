@@ -1,0 +1,30 @@
+{
+    "id": "64de2863cca118d90fb9bbbe",
+    "name": "Trigger-0",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "INSERT",
+            "DELETE",
+            "UPDATE"
+        ],
+        "database": "next_twitter",
+        "collection": "tweets",
+        "service_name": "mongodb-atlas",
+        "match": {},
+        "project": {},
+        "full_document": false,
+        "full_document_before_change": false,
+        "unordered": false,
+        "skip_catchup_events": false,
+        "tolerate_resume_errors": false
+    },
+    "disabled": false,
+    "event_processors": {
+        "FUNCTION": {
+            "config": {
+                "function_name": "myFunc"
+            }
+        }
+    }
+}
