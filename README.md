@@ -1,6 +1,11 @@
 
 # Twitter-CLONE
-Twitter-CLONE is a web application that mimics the functionality and design of the popular social media platform Twitter. It is built using Next.js, MongoDB, and Tailwind CSS. It allows users to create accounts, post tweets, follow other users, like and more.
+Twitter-CLONE is a web application that mimics the functionality and design of the popular social media platform Twitter.  It allows users to create accounts, post tweets, follow other users, like and more.
+# It is built using :
+- Next.js
+- MongoDb & mongoose
+- next-auth(google)
+- TailWind
 
 # Features
 Authentication: Users can sign up, log in, and log out using next-auth
