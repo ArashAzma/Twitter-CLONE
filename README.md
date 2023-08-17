@@ -6,6 +6,13 @@ Twitter-CLONE is a web application that mimics the functionality and design of t
 - MongoDb & mongoose
 - next-auth(google)
 - TailWind
+  
+![image](https://github.com/ArashAzma/Twitter-CLONE/assets/46264576/0edd0a0d-fb43-4d62-b9b8-97862d395fe7)
+
+![image](https://github.com/ArashAzma/Twitter-CLONE/assets/46264576/2d4bd5eb-8507-4c7d-8975-54f4031634c9)
+
+![image](https://github.com/ArashAzma/Twitter-CLONE/assets/46264576/181e8665-5ab7-4510-959a-c61de5072833)
+
 
 # Features
 Authentication: Users can sign up, log in, and log out using next-auth
